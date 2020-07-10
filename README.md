@@ -1,6 +1,6 @@
 # AWS ECS Metadata Go
 
-A tiny wrapper library to fetch Elastic Container Service (ECS) Task metadata from any Go service running in container provisioned by AWS Fargate.
+A minimal wrapper library to fetch Elastic Container Service (ECS) Task metadata from any Go service running in container provisioned by AWS Fargate.
 
 Based on the Fargate platform version, you'll have access to different versions of the Task Metadata Endpoint. If you're running on 1.4.0,
 you'll be able to access [Version 4](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-metadata-endpoint-v4.html), Fargate 1.3.0
@@ -16,7 +16,7 @@ go get github.com/brunoscheufler/aws-ecs-metadata-go
 
 This library allows you to retrieve the most recent metadata format available in your environment
 based on the environment variables Fargate will provide. This means, that using `GetTaskMetadata` you'll
-receie an empty interface which maps to either Version 3 or Version 4 of the Task Metadata struct.
+receive an empty interface which maps to either Version 3 or Version 4 of the Task Metadata structure.
 
 ```go
 package main
