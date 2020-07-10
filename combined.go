@@ -29,6 +29,8 @@ func Get(ctx context.Context, client *http.Client) (interface{}, error) {
 	return nil, fmt.Errorf("could not resolve ECS Task metadata")
 }
 
+// Will check whether the environment
+// has available metadata URIs to use for fetching
 func Has() bool {
 	if os.Getenv(ecsMetadataUriEnvV3) != "" {
 		return true
