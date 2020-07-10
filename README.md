@@ -22,26 +22,26 @@ receie an empty interface which maps to either Version 3 or Version 4 of the Tas
 package main
 
 import (
-	"context"
-	metadata "github.com/brunoscheufler/aws-ecs-metadata-go"
-	"log"
-	"net/http"
+    "context"
+    metadata "github.com/brunoscheufler/aws-ecs-metadata-go"
+    "log"
+    "net/http"
 )
 
 func main() {
     // Fetch ECS Task metadata from environment
-	meta, err := metadata.Get(context.Background(), &http.Client{})
-	if err != nil {
-		panic(err)
-	}
+    meta, err := metadata.Get(context.Background(), &http.Client{})
+    if err != nil {
+        panic(err)
+    }
 
     // Based on the Fargate platform version, we'll have access
     // to v3 or v4 of the ECS Metadata format
-	switch m := meta.(type) {
-	case *metadata.TaskMetadataV3:
-		log.Printf("%s %s:%s", m.Cluster, m.Family, m.Revision)
-	case *metadata.TaskMetadataV4:
-		log.Printf("%s(%s) %s:%s", m.Cluster, m.AvailabilityZone, m.Family, m.Revision)
-	}
+    switch m := meta.(type) {
+    case *metadata.TaskMetadataV3:
+        log.Printf("%s %s:%s", m.Cluster, m.Family, m.Revision)
+    case *metadata.TaskMetadataV4:
+        log.Printf("%s(%s) %s:%s", m.Cluster, m.AvailabilityZone, m.Family, m.Revision)
+    }
 }
 ```
