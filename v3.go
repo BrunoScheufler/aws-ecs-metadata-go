@@ -65,7 +65,7 @@ func GetTaskV3(ctx context.Context, client *http.Client) (*TaskMetadataV3, error
 	}
 
 	taskMetadata := &TaskMetadataV3{}
-	body, err := fetch(ctx, client, fmt.Sprintf("%s/task",metadataUrl))
+	body, err := fetch(ctx, client, fmt.Sprintf("%s/task", metadataUrl))
 
 	err = json.Unmarshal(body, &taskMetadata)
 	if err != nil {
