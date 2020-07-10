@@ -30,7 +30,7 @@ import (
 
 func main() {
     // Fetch ECS Task metadata from environment
-	meta, err := metadata.GetTaskMetadata(context.Background(), &http.Client{})
+	meta, err := metadata.Get(context.Background(), &http.Client{})
 	if err != nil {
 		panic(err)
 	}

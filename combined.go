@@ -10,7 +10,7 @@ import (
 // Will retrieve the task metadata
 // for your current Fargate environment (either V3 or V4)
 // based on the environment variables that are present
-func GetTaskMetadata(ctx context.Context, client *http.Client) (interface{}, error) {
+func Get(ctx context.Context, client *http.Client) (interface{}, error) {
 	// If the ECS Metadata URI for v4 is set,
 	// use this. When running on platform version 4,
 	// v3 might also still be set, though we prioritize the newer format
