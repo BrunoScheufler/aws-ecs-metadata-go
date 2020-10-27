@@ -76,7 +76,7 @@ func GetTaskV4(ctx context.Context, client *http.Client) (*TaskMetadataV4, error
 
 	err = json.Unmarshal(body, &taskMetadata)
 	if err != nil {
-		return nil, fmt.Errorf("could not unmarshal into task metadata v3: %w", err)
+		return nil, fmt.Errorf("could not unmarshal into task metadata v4: %w", err)
 	}
 
 	return taskMetadata, nil
