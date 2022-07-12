@@ -70,7 +70,7 @@ type TaskMetadataV4 struct {
 func GetTaskV4(ctx context.Context, client *http.Client) (*TaskMetadataV4, error) {
 	metadataUrl := os.Getenv(ecsMetadataUriEnvV4)
 	if metadataUrl == "" {
-		return nil, fmt.Errorf("missing metadata uri in environment (%s)", ecsMetadataUriEnvV3)
+		return nil, fmt.Errorf("missing metadata uri in environment (%s)", ecsMetadataUriEnvV4)
 	}
 
 	taskMetadata := &TaskMetadataV4{}
@@ -88,7 +88,7 @@ func GetTaskV4(ctx context.Context, client *http.Client) (*TaskMetadataV4, error
 func GetContainerV4(ctx context.Context, client *http.Client) (*ContainerMetadataV4, error) {
 	metadataUrl := os.Getenv(ecsMetadataUriEnvV4)
 	if metadataUrl == "" {
-		return nil, fmt.Errorf("missing metadata uri in environment (%s)", ecsMetadataUriEnvV3)
+		return nil, fmt.Errorf("missing metadata uri in environment (%s)", ecsMetadataUriEnvV4)
 	}
 
 	contaienrMetadata := &ContainerMetadataV4{}
