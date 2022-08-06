@@ -33,10 +33,11 @@ type ContainerMetadataV4 struct {
 	Limits        struct {
 		CPU int `json:"CPU"`
 	} `json:"Limits"`
-	CreatedAt time.Time `json:"CreatedAt"`
-	StartedAt time.Time `json:"StartedAt"`
-	Type      string    `json:"Type"`
-	Networks  []struct {
+	CreatedAt    time.Time `json:"CreatedAt"`
+	StartedAt    time.Time `json:"StartedAt"`
+	Type         string    `json:"Type"`
+	ContainerARN string    `json:"ContainerARN"`
+	Networks     []struct {
 		NetworkMode              string   `json:"NetworkMode"`
 		IPv4Addresses            []string `json:"IPv4Addresses"`
 		AttachmentIndex          int      `json:"AttachmentIndex"`
@@ -63,6 +64,7 @@ type TaskMetadataV4 struct {
 	PullStartedAt    time.Time             `json:"PullStartedAt"`
 	PullStoppedAt    time.Time             `json:"PullStoppedAt"`
 	AvailabilityZone string                `json:"AvailabilityZone"`
+	LaunchType       string                `json:"LaunchType"`
 	Containers       []ContainerMetadataV4 `json:"Containers"`
 }
 
