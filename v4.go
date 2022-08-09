@@ -15,6 +15,11 @@ const (
 	ecsMetadataUriEnvV4 = "ECS_CONTAINER_METADATA_URI_V4"
 )
 
+type Limits struct {
+	CPU    float64 `json:"CPU"`
+	Memory int     `json:"Memory"`
+}
+
 type ContainerMetadataV4 struct {
 	DockerID   string `json:"DockerId"`
 	Name       string `json:"Name"`
@@ -28,16 +33,21 @@ type ContainerMetadataV4 struct {
 		EcsTaskDefinitionFamily  string `json:"com.amazonaws.ecs.task-definition-family"`
 		EcsTaskDefinitionVersion string `json:"com.amazonaws.ecs.task-definition-version"`
 	} `json:"Labels"`
-	DesiredStatus string `json:"DesiredStatus"`
-	KnownStatus   string `json:"KnownStatus"`
-	Limits        struct {
-		CPU int `json:"CPU"`
-	} `json:"Limits"`
-	CreatedAt    time.Time `json:"CreatedAt"`
-	StartedAt    time.Time `json:"StartedAt"`
-	Type         string    `json:"Type"`
-	ContainerARN string    `json:"ContainerARN"`
-	Networks     []struct {
+	DesiredStatus string    `json:"DesiredStatus"`
+	KnownStatus   string    `json:"KnownStatus"`
+	Limits        Limits    `json:"Limits"`
+	CreatedAt     time.Time `json:"CreatedAt"`
+	StartedAt     time.Time `json:"StartedAt"`
+	Type          string    `json:"Type"`
+	ContainerARN  string    `json:"ContainerARN"`
+	LogDriver     string    `json:"LogDriver"`
+	LogOptions    struct {
+		AwsLogsCreateGroup bool   `json:"awslogs-create-group"`
+		AwsLogsGroup       string `json:"awslogs-group"`
+		AwsLogsStream      string `json:"awslogs-stream"`
+		AwsRegion          string `json:"awslogs-region"`
+	} `json:"LogOptions"`
+	Networks []struct {
 		NetworkMode              string   `json:"NetworkMode"`
 		IPv4Addresses            []string `json:"IPv4Addresses"`
 		AttachmentIndex          int      `json:"AttachmentIndex"`
@@ -51,16 +61,13 @@ type ContainerMetadataV4 struct {
 }
 
 type TaskMetadataV4 struct {
-	Cluster       string `json:"Cluster"`
-	TaskARN       string `json:"TaskARN"`
-	Family        string `json:"Family"`
-	Revision      string `json:"Revision"`
-	DesiredStatus string `json:"DesiredStatus"`
-	KnownStatus   string `json:"KnownStatus"`
-	Limits        struct {
-		CPU    float64 `json:"CPU"`
-		Memory int     `json:"Memory"`
-	} `json:"Limits"`
+	Cluster          string                `json:"Cluster"`
+	TaskARN          string                `json:"TaskARN"`
+	Family           string                `json:"Family"`
+	Revision         string                `json:"Revision"`
+	DesiredStatus    string                `json:"DesiredStatus"`
+	KnownStatus      string                `json:"KnownStatus"`
+	Limits           Limits                `json:"Limits"`
 	PullStartedAt    time.Time             `json:"PullStartedAt"`
 	PullStoppedAt    time.Time             `json:"PullStoppedAt"`
 	AvailabilityZone string                `json:"AvailabilityZone"`
@@ -77,6 +84,9 @@ func GetTaskV4(ctx context.Context, client *http.Client) (*TaskMetadataV4, error
 
 	taskMetadata := &TaskMetadataV4{}
 	body, err := fetch(ctx, client, fmt.Sprintf("%s/task", metadataUrl))
+	if err != nil {
+		return nil, fmt.Errorf("could not retrieve task metadata v4: %w", err)
+	}
 
 	err = json.Unmarshal(body, &taskMetadata)
 	if err != nil {
@@ -93,13 +103,16 @@ func GetContainerV4(ctx context.Context, client *http.Client) (*ContainerMetadat
 		return nil, fmt.Errorf("missing metadata uri in environment (%s)", ecsMetadataUriEnvV4)
 	}
 
-	contaienrMetadata := &ContainerMetadataV4{}
-	body, err := fetch(ctx, client, fmt.Sprintf("%s", metadataUrl))
+	containerMetadata := &ContainerMetadataV4{}
+	body, err := fetch(ctx, client, metadataUrl)
+	if err != nil {
+		return nil, fmt.Errorf("could not retrieve container metadata v4: %w", err)
+	}
 
-	err = json.Unmarshal(body, &contaienrMetadata)
+	err = json.Unmarshal(body, &containerMetadata)
 	if err != nil {
 		return nil, fmt.Errorf("could not unmarshal into container metadata v4: %w", err)
 	}
 
-	return contaienrMetadata, nil
+	return containerMetadata, nil
 }
