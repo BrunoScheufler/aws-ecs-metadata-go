@@ -42,7 +42,7 @@ type ContainerMetadataV4 struct {
 	ContainerARN  string    `json:"ContainerARN"`
 	LogDriver     string    `json:"LogDriver"`
 	LogOptions    struct {
-		AwsLogsCreateGroup bool   `json:"awslogs-create-group"`
+		AwsLogsCreateGroup string `json:"awslogs-create-group"`
 		AwsLogsGroup       string `json:"awslogs-group"`
 		AwsLogsStream      string `json:"awslogs-stream"`
 		AwsRegion          string `json:"awslogs-region"`
