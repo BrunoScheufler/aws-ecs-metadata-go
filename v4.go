@@ -15,6 +15,11 @@ const (
 	ecsMetadataUriEnvV4 = "ECS_CONTAINER_METADATA_URI_V4"
 )
 
+type Limits struct {
+	CPU    float64 `json:"CPU"`
+	Memory int     `json:"Memory"`
+}
+
 type ContainerMetadataV4 struct {
 	DockerID   string `json:"DockerId"`
 	Name       string `json:"Name"`
@@ -28,16 +33,14 @@ type ContainerMetadataV4 struct {
 		EcsTaskDefinitionFamily  string `json:"com.amazonaws.ecs.task-definition-family"`
 		EcsTaskDefinitionVersion string `json:"com.amazonaws.ecs.task-definition-version"`
 	} `json:"Labels"`
-	DesiredStatus string `json:"DesiredStatus"`
-	KnownStatus   string `json:"KnownStatus"`
-	Limits        struct {
-		CPU int `json:"CPU"`
-	} `json:"Limits"`
-	CreatedAt    time.Time `json:"CreatedAt"`
-	StartedAt    time.Time `json:"StartedAt"`
-	Type         string    `json:"Type"`
-	ContainerARN string    `json:"ContainerARN"`
-	Networks     []struct {
+	DesiredStatus string    `json:"DesiredStatus"`
+	KnownStatus   string    `json:"KnownStatus"`
+	Limits        Limits    `json:"Limits"`
+	CreatedAt     time.Time `json:"CreatedAt"`
+	StartedAt     time.Time `json:"StartedAt"`
+	Type          string    `json:"Type"`
+	ContainerARN  string    `json:"ContainerARN"`
+	Networks      []struct {
 		NetworkMode              string   `json:"NetworkMode"`
 		IPv4Addresses            []string `json:"IPv4Addresses"`
 		AttachmentIndex          int      `json:"AttachmentIndex"`
@@ -51,16 +54,13 @@ type ContainerMetadataV4 struct {
 }
 
 type TaskMetadataV4 struct {
-	Cluster       string `json:"Cluster"`
-	TaskARN       string `json:"TaskARN"`
-	Family        string `json:"Family"`
-	Revision      string `json:"Revision"`
-	DesiredStatus string `json:"DesiredStatus"`
-	KnownStatus   string `json:"KnownStatus"`
-	Limits        struct {
-		CPU    float64 `json:"CPU"`
-		Memory int     `json:"Memory"`
-	} `json:"Limits"`
+	Cluster          string                `json:"Cluster"`
+	TaskARN          string                `json:"TaskARN"`
+	Family           string                `json:"Family"`
+	Revision         string                `json:"Revision"`
+	DesiredStatus    string                `json:"DesiredStatus"`
+	KnownStatus      string                `json:"KnownStatus"`
+	Limits           Limits                `json:"Limits"`
 	PullStartedAt    time.Time             `json:"PullStartedAt"`
 	PullStoppedAt    time.Time             `json:"PullStoppedAt"`
 	AvailabilityZone string                `json:"AvailabilityZone"`
