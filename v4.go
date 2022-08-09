@@ -84,6 +84,9 @@ func GetTaskV4(ctx context.Context, client *http.Client) (*TaskMetadataV4, error
 
 	taskMetadata := &TaskMetadataV4{}
 	body, err := fetch(ctx, client, fmt.Sprintf("%s/task", metadataUrl))
+	if err != nil {
+		return nil, fmt.Errorf("could not retrieve task metadata v4: %w", err)
+	}
 
 	err = json.Unmarshal(body, &taskMetadata)
 	if err != nil {
@@ -100,13 +103,16 @@ func GetContainerV4(ctx context.Context, client *http.Client) (*ContainerMetadat
 		return nil, fmt.Errorf("missing metadata uri in environment (%s)", ecsMetadataUriEnvV4)
 	}
 
-	contaienrMetadata := &ContainerMetadataV4{}
-	body, err := fetch(ctx, client, fmt.Sprintf("%s", metadataUrl))
+	containerMetadata := &ContainerMetadataV4{}
+	body, err := fetch(ctx, client, metadataUrl)
+	if err != nil {
+		return nil, fmt.Errorf("could not retrieve container metadata v4: %w", err)
+	}
 
-	err = json.Unmarshal(body, &contaienrMetadata)
+	err = json.Unmarshal(body, &containerMetadata)
 	if err != nil {
 		return nil, fmt.Errorf("could not unmarshal into container metadata v4: %w", err)
 	}
 
-	return contaienrMetadata, nil
+	return containerMetadata, nil
 }
