@@ -40,7 +40,14 @@ type ContainerMetadataV4 struct {
 	StartedAt     time.Time `json:"StartedAt"`
 	Type          string    `json:"Type"`
 	ContainerARN  string    `json:"ContainerARN"`
-	Networks      []struct {
+	LogDriver     string    `json:"LogDriver"`
+	LogOptions    struct {
+		AwsLogsCreateGroup bool   `json:"awslogs-create-group"`
+		AwsLogsGroup       string `json:"awslogs-group"`
+		AwsLogsStream      string `json:"awslogs-stream"`
+		AwsRegion          string `json:"awslogs-region"`
+	} `json:"LogOptions"`
+	Networks []struct {
 		NetworkMode              string   `json:"NetworkMode"`
 		IPv4Addresses            []string `json:"IPv4Addresses"`
 		AttachmentIndex          int      `json:"AttachmentIndex"`
