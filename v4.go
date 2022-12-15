@@ -13,6 +13,12 @@ import (
 
 const (
 	ecsMetadataUriEnvV4 = "ECS_CONTAINER_METADATA_URI_V4"
+
+	labelEcsCluster               = "com.amazonaws.ecs.cluster"
+	labelEcsContainerName         = "com.amazonaws.ecs.container-name"
+	labelEcsTaskArn               = "com.amazonaws.ecs.task-arn"
+	labelEcsTaskDefinitionFamily  = "com.amazonaws.ecs.task-definition-family"
+	labelEcsTaskDefinitionVersion = "com.amazonaws.ecs.task-definition-version"
 )
 
 type Limits struct {
@@ -20,19 +26,54 @@ type Limits struct {
 	Memory int     `json:"Memory"`
 }
 
+type LabelsV4 struct {
+	EcsCluster               string
+	EcsContainerName         string
+	EcsTaskArn               string
+	EcsTaskDefinitionFamily  string
+	EcsTaskDefinitionVersion string
+
+	rest map[string]string
+}
+
+func (l LabelsV4) Get(name string) string {
+	return l.rest[name]
+}
+
+func (l *LabelsV4) UnmarshalJSON(b []byte) error {
+	if err := json.Unmarshal(b, &l.rest); err != nil {
+		return err
+	}
+	if cluster, ok := l.rest[labelEcsCluster]; ok {
+		l.EcsCluster = cluster
+		delete(l.rest, labelEcsCluster)
+	}
+	if containerName, ok := l.rest[labelEcsContainerName]; ok {
+		l.EcsContainerName = containerName
+		delete(l.rest, labelEcsContainerName)
+	}
+	if taskArn, ok := l.rest[labelEcsTaskArn]; ok {
+		l.EcsTaskArn = taskArn
+		delete(l.rest, labelEcsTaskArn)
+	}
+	if family, ok := l.rest[labelEcsTaskDefinitionFamily]; ok {
+		l.EcsTaskDefinitionFamily = family
+		delete(l.rest, labelEcsTaskDefinitionFamily)
+	}
+	if version, ok := l.rest[labelEcsTaskDefinitionVersion]; ok {
+		l.EcsTaskDefinitionVersion = version
+		delete(l.rest, labelEcsTaskDefinitionVersion)
+	}
+	return nil
+}
+
 type ContainerMetadataV4 struct {
-	DockerID   string `json:"DockerId"`
-	Name       string `json:"Name"`
-	DockerName string `json:"DockerName"`
-	Image      string `json:"Image"`
-	ImageID    string `json:"ImageID"`
-	Labels     struct {
-		EcsCluster               string `json:"com.amazonaws.ecs.cluster"`
-		EcsContainerName         string `json:"com.amazonaws.ecs.container-name"`
-		EcsTaskArn               string `json:"com.amazonaws.ecs.task-arn"`
-		EcsTaskDefinitionFamily  string `json:"com.amazonaws.ecs.task-definition-family"`
-		EcsTaskDefinitionVersion string `json:"com.amazonaws.ecs.task-definition-version"`
-	} `json:"Labels"`
+	DockerID      string    `json:"DockerId"`
+	Name          string    `json:"Name"`
+	DockerName    string    `json:"DockerName"`
+	Image         string    `json:"Image"`
+	ImageID       string    `json:"ImageID"`
+	Labels        LabelsV4  `json:"Labels"`
 	DesiredStatus string    `json:"DesiredStatus"`
 	KnownStatus   string    `json:"KnownStatus"`
 	Limits        Limits    `json:"Limits"`

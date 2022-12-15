@@ -9,7 +9,8 @@
         "com.amazonaws.ecs.container-name": "curl",
         "com.amazonaws.ecs.task-arn": "arn:aws:ecs:us-west-2:111122223333:task/default/8f03e41243824aea923aca126495f665",
         "com.amazonaws.ecs.task-definition-family": "curltest",
-        "com.amazonaws.ecs.task-definition-version": "24"
+        "com.amazonaws.ecs.task-definition-version": "24",
+        "org.opencontainers.image.revision": "0xdeadbeaf"
     },
     "DesiredStatus": "RUNNING",
     "KnownStatus": "RUNNING",
